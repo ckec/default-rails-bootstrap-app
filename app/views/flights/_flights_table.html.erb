@@ -1,5 +1,9 @@
+<hr>
 <% if @flights.present? %>
   <div class="row">
+    <div class="d-flex justify-content-center mb-5">
+      <h1 class="text-info">Flight Information</h1>
+    </div>
     <%= form_with(url: new_booking_path, method: :get) do |form| %>
       <% @flights.sort_by(&:start_datetime).each do |flight| %>
         <%= form.hidden_field :passenger_count, value: @passsenger_count %>
