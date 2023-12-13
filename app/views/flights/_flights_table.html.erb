@@ -1,0 +1,39 @@
+<% if @flights.present? %>
+  <div class="row">
+    <%= form_with(url: new_booking_path, method: :get) do |form| %>
+      <% @flights.sort_by(&:start_datetime).each do |flight| %>
+        <%= form.hidden_field :passenger_count, value: @passsenger_count %>
+        <div class="card mb-4">
+          <div class="d-flex justify-content-between align-items-center card-body">
+            <div>
+              <h5 class="card-title"><%= Airport.find(flight.departure_airport_id).code %> - <%= Airport.find(flight.arrival_airport_id).code %></h5>
+              <p class="card-text"><%= flight.start_datetime.strftime("%m/%d/%Y %H:%M") %></p>
+            </div>
+            <div class="d-flex justify-content-around align-items-center w-25">
+              <div>
+                <span>SELECT FLIGHT: </span>
+              </div>
+              <div class="ml-1">
+                <%= form.radio_button 'flight', flight.id, class: "form-check-input" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <div class="d-flex justify-content-center">
+        <%= form.button "Book", class: "btn btn-primary mb-2 mt-2", id: "book_button", disabled: true %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="mb-3 mt-3 w-50 mx-auto alert alert-warning" role="alert">
+    <p class="text-center mb-0">No flights found!</p>
+  </div>
+<% end %>
+<script>
+  document.querySelectorAll('.form-check-input').forEach(function(radioButton) {
+    radioButton.addEventListener('change', function() {
+      document.getElementById('book_button').disabled = false;
+    });
+  });
+</script>

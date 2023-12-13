@@ -1,0 +1,13 @@
+<%= form_with model: @booking, method: :post do |form| %>
+  <% params[:passenger_count].to_i.times do |i| %>
+    <%= form.fields_for @booking.passengers.build do |sub_form| %>
+      <%= sub_form.label :name %>
+      <%= sub_form.text_field :name %>
+      <%= sub_form.label :email %>
+      <%= sub_form.text_field :email %>
+    <% end %>
+  <% end %>
+  <div>
+    <%= form.submit "Book Flight" %>
+  </div>
+<% end %>

@@ -1,0 +1,46 @@
+<div class="mb-3 mt-3 w-25 mx-auto">
+  <%= form_with(model: Flight.all, url: search_path, method: :get, data: { turbo_stream: true }) do |form| %>
+    <div>
+      <div class="d-flex justify-content-center">
+        <%= form.label :departure_airport_id, "Departure airport:", class: "text-info mb-2 mt-2" %>
+      </div>
+      <%= form.select :departure_airport_id, @airport_options, {}, { class: "form-select mb-2 mt-2" } %>
+    </div>
+    <div>
+      <div class="d-flex justify-content-center">
+        <%= form.label :arrival_airport_id, "Arrival airport:", class: "text-info mb-2 mt-2"  %>
+      </div>
+      <%= form.select :arrival_airport_id, @airport_options, {}, { class: "form-select mb-2 mt-2" } %>
+    </div>
+    <div>
+      <div class="d-flex justify-content-center">
+        <%= form.label :passenger_count, "Number of passengers:", class: "text-info" %>
+      </div>
+      <%= form.select :passenger_count, (1..4).to_a, {}, class: "form-select mb-2 mt-2" %>
+    </div>
+    <div class="d-flex justify-content-center">
+      <%= form.label :departure_date, "Departure date:", class: "text-info mb-2 mt-2" %>
+    </div>
+    <div>
+      <%= select_year(Date.today, options = { start_year: 2023, end_year: 2024, }, { class: "form-select form-select-sm mb-2 mt-2" }) %>
+    </div>
+    <div>
+      <%= select_month(Date.today, options = {}, { class: "form-select form-select-sm mb-2 mt-2" }) %>
+    </div>
+    <div>
+      <%= select_day(Date.today, options = {}, { class: "form-select form-select-sm mb-2 mt-2" }) %>
+    </div>
+    <div>
+      <div class="d-flex justify-content-center">
+        <%= form.button "Search", class: "btn btn-primary mb-2 mt-2" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+<hr>
+<div class="d-flex justify-content-center mb-5">
+  <h1 class="text-info">Flight Information</h1>
+</div>
+<div id="flights_table_frame">
+  <% render partial: "flights_table", locals: { flights: @flights } %>
+</div>
