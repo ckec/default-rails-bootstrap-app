@@ -2,12 +2,12 @@
   <div class="card mb-4 w-50">
     <div class="d-flex justify-content-center align-items-center card-body">
       <div>
-        <h5 class="card-title text-center"><%= Airport.find(@flight.departure_airport_id).code %> - <%= Airport.find(@flight.arrival_airport_id).code %></h5>
+        <h5 class="card-title text-center"><%= find_departure_airport(@flight) %> - <%= find_arrival_airport(@flight) %></h5>
         <p class="card-text"><%= @flight.start_datetime.strftime("%m/%d/%Y %H:%M") %></p>
       </div>
     </div>
   </div>
-  <div class="justify-content-center align-items-center">
+  <div class="justify-content-center align-items-center" data-controller="enable-submit">
     <%= form_with model: @booking do |form| %>
       <%= form.hidden_field :flight_id, value: @flight.id %>
       <% @booking.passengers.each_with_index do |passenger, index| %>
@@ -17,33 +17,22 @@
         <%= form.fields_for :passengers, passenger do |sub_form| %>
           <%= sub_form.hidden_field :id, value: passenger.id %>
           <div class="d-flex flex-column justify-content-between align-items-center mb-4">
-            <%= sub_form.text_field :name, class: "form-control required", placeholder: "First And Last Name", onkeyup: "enableSubmit()" %>
+            <div>
+              <%= sub_form.text_field :name, class: "form-control required", placeholder: "First And Last Name", "data-enable-submit-target": "input", "data-action": "enable-submit#enableSubmit" %>
+            </div>
           </div>
           <div class="d-flex flex-column justify-content-between align-items-center mb-4">
-            <%= sub_form.text_field :email, class: "form-control required", placeholder: "example@example.com", onkeyup: "enableSubmit()" %>
+            <div>
+              <%= sub_form.text_field :email, class: "form-control required", placeholder: "example@example.com", "data-enable-submit-target": "input", "data-action": "enable-submit#enableSubmit" %>
+            </div>
           </div>
         <% end %>
       <% end %>
       <div class="d-flex justify-content-center">
-        <%= form.button "Book Flight", class: "btn btn-primary mb-2 mt-2", id: "book_button", disabled: true %>
+        <div>
+          <%= form.button "Book Flight", class: "btn btn-primary mb-2 mt-2", id: "book_button", "data-enable-submit-target": "submit", disabled: true %>
+        </div>
       </div>
     <% end %>
   </div>
 </div>
-<script>
-  function enableSubmit() {
-    let inputs = document.getElementsByClassName('required');
-    let btn = document.querySelector('button[type="submit"]');
-    let isValid = true;
-
-    for (var i = 0; i < inputs.length; i++) {
-      let changedInput = inputs[i];
-      if (changedInput.value.trim() === "" || changedInput.value === null) {
-        isValid = false;
-        break;
-      }
-    }
-
-    btn.disabled = !isValid;
-  }
-</script>

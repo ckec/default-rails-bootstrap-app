@@ -1,4 +1,8 @@
 class FlightsController < ApplicationController
+
+  helper_method :find_departure_airport
+  helper_method :find_arrival_airport
+  
   def index
     @flights = Flight.all
     @airport_options = Airport.all.map { |a| [a.code, a.id] }
@@ -17,6 +21,14 @@ class FlightsController < ApplicationController
       end
       format.html { redirect_to flights_path}
     end
+  end
+
+  def find_departure_airport(flight)
+    Airport.find(flight.departure_airport_id).code
+  end
+
+  def find_arrival_airport(flight)
+    Airport.find(flight.arrival_airport_id).code
   end
 
   private

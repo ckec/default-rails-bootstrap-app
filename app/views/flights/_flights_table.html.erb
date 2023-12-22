@@ -1,6 +1,6 @@
 <hr>
 <% if @flights.present? %>
-  <div class="row">
+  <div class="row" data-controller="radio-button">
     <div class="d-flex justify-content-center mb-5">
       <h1 class="text-info">Flight Information</h1>
     </div>
@@ -10,7 +10,7 @@
         <div class="card mb-4">
           <div class="d-flex justify-content-between align-items-center card-body">
             <div>
-              <h5 class="card-title"><%= Airport.find(flight.departure_airport_id).code %> - <%= Airport.find(flight.arrival_airport_id).code %></h5>
+              <h5 class="card-title"><%= find_departure_airport(flight) %> - <%= find_arrival_airport(flight) %></h5>
               <p class="card-text"><%= flight.start_datetime.strftime("%m/%d/%Y %H:%M") %></p>
             </div>
             <div class="d-flex justify-content-around align-items-center w-25">
@@ -18,14 +18,14 @@
                 <span>SELECT FLIGHT: </span>
               </div>
               <div class="ml-1">
-                <%= form.radio_button 'flight', flight.id, class: "form-check-input" %>
+                <%= form.radio_button 'flight', flight.id, class: "form-check-input", "data-radio-button-target": "input", "data-action": "click->radio-button#enableButton" %>
               </div>
             </div>
           </div>
         </div>
       <% end %>
       <div class="d-flex justify-content-center">
-        <%= form.button "Book", class: "btn btn-primary mb-2 mt-2", id: "book_button", disabled: true %>
+        <%= form.button "Book", class: "btn btn-primary mb-2 mt-2", id: "book_button", "data-radio-button-target": "button", disabled: true %>
       </div>
     <% end %>
   </div>
@@ -34,10 +34,3 @@
     <p class="text-center mb-0">No flights found!</p>
   </div>
 <% end %>
-<script>
-  document.querySelectorAll('.form-check-input').forEach(function(radioButton) {
-    radioButton.addEventListener('change', function() {
-      document.getElementById('book_button').disabled = false;
-    });
-  });
-</script>

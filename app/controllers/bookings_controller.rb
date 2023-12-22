@@ -1,6 +1,9 @@
 class BookingsController < ApplicationController
   include BookingsHelper
 
+  helper_method :find_departure_airport
+  helper_method :find_arrival_airport
+
   def new
     @booking = Booking.new
     params[:passenger_count].to_i.times { @booking.passengers.build }
@@ -20,6 +23,14 @@ class BookingsController < ApplicationController
 
   def show
     @booking = Booking.find(params[:id])
+  end
+
+  def find_departure_airport(flight)
+    Airport.find(flight.departure_airport_id).code
+  end
+
+  def find_arrival_airport(flight)
+    Airport.find(flight.arrival_airport_id).code
   end
 
   private
